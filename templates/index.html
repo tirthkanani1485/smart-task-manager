@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Task Manager</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+<body>
+
+<div class="container">
+
+    <div class="top-bar">
+        <h1>Smart Task Management System</h1>
+
+        <a href="/logout">
+            <button class="logout-btn">Logout</button>
+        </a>
+    </div>
+
+    <!-- ADD TASK SECTION -->
+
+    <div class="card">
+
+        <h2>Add New Task</h2>
+
+        <form action="/add_task" method="POST">
+
+            <input type="text" name="title" placeholder="Enter Task Title" required>
+
+            <textarea name="description" placeholder="Enter Task Description"></textarea>
+
+            <div class="row">
+
+                <select name="priority">
+
+                    <option value="Low">Low Priority</option>
+                    <option value="Medium">Medium Priority</option>
+                    <option value="High">High Priority</option>
+
+                </select>
+
+                <select name="status">
+
+                    <option value="Pending">Pending</option>
+                    <option value="Completed">Completed</option>
+
+                </select>
+
+            </div>
+
+            <button type="submit" class="add-btn">Add Task</button>
+
+        </form>
+
+    </div>
+
+    <!-- ANALYTICS -->
+
+    <div class="analytics-container">
+
+        <div class="analytics-card">
+            <h3>Total Tasks</h3>
+            <p>{{ total_tasks }}</p>
+        </div>
+
+        <div class="analytics-card">
+            <h3>Completed</h3>
+            <p>{{ completed_tasks }}</p>
+        </div>
+
+        <div class="analytics-card">
+            <h3>Pending</h3>
+            <p>{{ pending_tasks }}</p>
+        </div>
+
+        <div class="analytics-card">
+            <h3>Completion %</h3>
+            <p>{{ completion_percentage }}%</p>
+        </div>
+
+    </div>
+
+    <!-- TASK LIST -->
+
+    <div class="card">
+
+        <h2>Your Tasks</h2>
+
+        {% if tasks %}
+
+        <table>
+
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+
+            {% for task in tasks %}
+
+            <tr>
+
+                <td>{{ task.title }}</td>
+
+                <td>{{ task.description }}</td>
+
+                <td>
+                    <span class="priority {{ task.priority }}">
+                        {{ task.priority }}
+                    </span>
+                </td>
+
+                <td>
+                    <span class="status {{ task.status }}">
+                        {{ task.status }}
+                    </span>
+                </td>
+
+                <td>{{ task.created_date.strftime('%d-%m-%Y') }}</td>
+
+                <td>
+
+                    <a href="/delete_task/{{ task.id }}">
+                        <button class="delete-btn">Delete</button>
+                    </a>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+        {% else %}
+
+        <p class="no-task">No Tasks Added Yet</p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+</body>
+</html>
